@@ -5,34 +5,34 @@ const Button = ({ text, onClick }) => {
   return <button onClick={onClick}>{text}</button>;
 };
 
-const Statistics = ({ all, average, positivePercentage }) => {
-  if (all === 0) {
+const Statistics = (props) => {
+  if (props.all === 0) {
     return <>No feedback given</>;
   }
   return (
     <>
-      <table
-        style={{
-          width: 50 + "%",
-          border: 1 + "px solid black",
-          borderCollapse: "collapse",
-        }}
-      >
-        <thead>
-          <tr>
-            <th>All</th>
-            <th>Average</th>
-            <th>Positive percentage</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>{all}</td>
-            <td>{average}</td>
-            <td>{positivePercentage}</td>
-          </tr>
-        </tbody>
-      </table>
+      <StatisticLine text={"good"} value={props.good} />
+      <br />
+      <StatisticLine text={"neutral"} value={props.neutral} />
+      <br />
+      <StatisticLine text={"bad"} value={props.bad} />
+      <br />
+      <StatisticLine text={"all"} value={props.all} />
+      <br />
+      <StatisticLine text={"average"} value={props.average} />
+      <br />
+      <StatisticLine
+        text={"positive percentage"}
+        value={props.positivePercentage}
+      />
+    </>
+  );
+};
+
+const StatisticLine = ({ text, value }) => {
+  return (
+    <>
+      {text} - {value}
     </>
   );
 };
@@ -105,6 +105,9 @@ const App = () => {
       <Button text={"Bad"} onClick={handleBadClick} />
       <h1>Statistics</h1>
       <Statistics
+        good={rating.good}
+        neutral={rating.neutral}
+        bad={rating.bad}
         all={rating.all}
         average={rating.average}
         positivePercentage={rating.positivePercentage}
