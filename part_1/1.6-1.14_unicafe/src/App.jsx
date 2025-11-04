@@ -6,9 +6,11 @@ const Button = ({ text, onClick }) => {
 };
 
 const Statistics = ({ all, average, positivePercentage }) => {
+  if (all === 0) {
+    return <>No feedback given</>;
+  }
   return (
     <>
-      <h1>Statistics</h1>
       <table
         style={{
           width: 50 + "%",
@@ -101,6 +103,7 @@ const App = () => {
       <Button text={"Good"} onClick={handleGoodClick} />
       <Button text={"Neutral"} onClick={handleNeutralClick} />
       <Button text={"Bad"} onClick={handleBadClick} />
+      <h1>Statistics</h1>
       <Statistics
         all={rating.all}
         average={rating.average}
