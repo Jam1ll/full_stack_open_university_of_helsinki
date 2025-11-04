@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { useState } from "react";
 
 const Button = ({ text, onClick }) => {
@@ -13,12 +14,56 @@ const App = () => {
     good: 0,
     neutral: 0,
     bad: 0,
+    all: 0,
+    average: 0.0,
+    positivePercentage: 0.0,
   });
 
-  const handleGoodClick = () => setRating({ ...rating, good: rating.good + 1 });
-  const handleNeutralClick = () =>
-    setRating({ ...rating, neutral: rating.neutral + 1 });
-  const handleBadClick = () => setRating({ ...rating, bad: rating.bad + 1 });
+  const handleGoodClick = () => {
+    const good = rating.good + 1;
+    const all = good + rating.neutral + rating.bad;
+    const average =
+      ((good * 1 + rating.neutral * 0 + rating.bad * -1) / all) * 100;
+    const positivePercentage = (good * 100) / all;
+    setRating({
+      ...rating,
+      good: good,
+      all: all,
+      average: average,
+      positivePercentage: positivePercentage,
+    });
+  };
+
+  const handleNeutralClick = () => {
+    const neutral = rating.neutral + 1;
+    const all = rating.good + neutral + rating.bad;
+    const average =
+      ((rating.good * 1 + neutral * 0 + rating.bad * -1) / all) * 100;
+    const positivePercentage = (rating.good * 100) / all;
+    setRating({
+      ...rating,
+      neutral: neutral,
+      all: all,
+      average: average,
+      positivePercentage: positivePercentage,
+    });
+  };
+
+  const handleBadClick = () => {
+    const bad = rating.bad + 1;
+    const all = rating.good + rating.neutral + bad;
+    const average =
+      ((rating.good * 1 + rating.neutral * 0 + bad * -1) / all) * 100;
+    const positivePercentage = (rating.good * 100) / all;
+    const newBad = rating.bad + 1;
+    setRating({
+      ...rating,
+      bad: newBad,
+      all: all,
+      average: average,
+      positivePercentage: positivePercentage,
+    });
+  };
 
   return (
     <>
@@ -32,6 +77,12 @@ const App = () => {
       neutral: {rating.neutral}
       <br />
       bad: {rating.bad}
+      <h1>Statistics 2</h1>
+      all: {rating.all}
+      <br />
+      average: {rating.average}%
+      <br />
+      positive percentage: {rating.positivePercentage}%
     </>
   );
 };
