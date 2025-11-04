@@ -5,6 +5,36 @@ const Button = ({ text, onClick }) => {
   return <button onClick={onClick}>{text}</button>;
 };
 
+const Statistics = ({ all, average, positivePercentage }) => {
+  return (
+    <>
+      <h1>Statistics</h1>
+      <table
+        style={{
+          width: 50 + "%",
+          border: 1 + "px solid black",
+          borderCollapse: "collapse",
+        }}
+      >
+        <thead>
+          <tr>
+            <th>All</th>
+            <th>Average</th>
+            <th>Positive percentage</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{all}</td>
+            <td>{average}</td>
+            <td>{positivePercentage}</td>
+          </tr>
+        </tbody>
+      </table>
+    </>
+  );
+};
+
 const App = () => {
   //const [good, setGood] = useState(0);
   //const [neutral, setNeutral] = useState(0);
@@ -71,18 +101,11 @@ const App = () => {
       <Button text={"Good"} onClick={handleGoodClick} />
       <Button text={"Neutral"} onClick={handleNeutralClick} />
       <Button text={"Bad"} onClick={handleBadClick} />
-      <h1>Statistics</h1>
-      good: {rating.good}
-      <br />
-      neutral: {rating.neutral}
-      <br />
-      bad: {rating.bad}
-      <h1>Statistics 2</h1>
-      all: {rating.all}
-      <br />
-      average: {rating.average}%
-      <br />
-      positive percentage: {rating.positivePercentage}%
+      <Statistics
+        all={rating.all}
+        average={rating.average}
+        positivePercentage={rating.positivePercentage}
+      />
     </>
   );
 };
