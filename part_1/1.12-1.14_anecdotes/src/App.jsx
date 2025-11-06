@@ -4,6 +4,12 @@ const Button = ({ text, onClick }) => {
   return <button onClick={onClick}>{text}</button>;
 };
 
+const MostVoted = ({ votes, anecdotes }) => {
+  const greatestIndex = votes.indexOf(Math.max(...votes));
+  console.log("greates index:", greatestIndex);
+  return <h3>Most Voted: {anecdotes[greatestIndex]}</h3>;
+};
+
 const App = () => {
   const anecdotes = [
     "If it hurts, do it more often.",
@@ -36,6 +42,7 @@ const App = () => {
       <h4>has {votes[selected]} votes</h4>
       <Button text={"new anecdote"} onClick={handleAnecdoteClick} />
       <Button text={"vote"} onClick={handleAnecdoteVote} />
+      <MostVoted votes={votes} anecdotes={anecdotes} />
     </>
   );
 };
