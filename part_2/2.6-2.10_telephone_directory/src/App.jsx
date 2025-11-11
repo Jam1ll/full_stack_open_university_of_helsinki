@@ -1,35 +1,53 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from "react";
+import Person from "./components/Person";
 
-function App() {
-  const [count, setCount] = useState(0)
+const App = () => {
+  //hooks
+  const [persons, setPerson] = useState([{ id: 1, name: "Arto Hellas" }]);
+  const [newName, setNewName] = useState("");
+
+  //add a new person
+  const addPerson = (event) => {
+    event.preventDefault();
+    console.log(event);
+
+    const newPerson = {
+      id: persons.length + 1,
+      name: newName,
+    };
+    const newArrayOfPersons = persons.concat(newPerson);
+
+    setPerson(newArrayOfPersons);
+    setNewName("");
+  };
+
+  const handleNameChange = (event) => {
+    const value = event.target.value;
+    setNewName(value);
+  };
 
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+      <h2>PhoneBook</h2>
+      <form>
+        <div>
+          name: <input value={newName} onChange={handleNameChange} />
+        </div>
 
-export default App
+        <div>
+          <button type="submit" onClick={addPerson}>
+            add
+          </button>
+        </div>
+      </form>
+      <h2>Numbers</h2>
+      <ul>
+        {persons.map((person) => (
+          <Person key={person.id} person={person} />
+        ))}
+      </ul>
+    </>
+  );
+};
+
+export default App;
