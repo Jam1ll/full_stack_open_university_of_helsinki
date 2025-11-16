@@ -6,18 +6,43 @@ const App = () => {
   const [persons, setPerson] = useState([{ id: 1, name: "Arto Hellas" }]);
   const [newName, setNewName] = useState("");
 
+  const validateName = (arrayWithNames) => {
+    console.log("array with names:", arrayWithNames);
+
+    const formattedName = newName.replace(/\s/g, "").toLowerCase();
+
+    console.log("searching", formattedName);
+
+    const found = arrayWithNames.find((element) => {
+      console.log("element", element);
+      const formattedArrayName = element.name.replace(/\s/g, "").toLowerCase();
+      console.log(`comparing ${formattedArrayName} with ${formattedName}`);
+      return formattedArrayName === formattedName;
+    });
+    return found; //returns whether an object or undefined
+  };
+
   //add a new person
   const addPerson = (event) => {
-    event.preventDefault();
-    console.log(event);
+    event.preventDefault(); //prevent F5
 
-    const newPerson = {
-      id: persons.length + 1,
-      name: newName,
-    };
-    const newArrayOfPersons = persons.concat(newPerson);
+    if (newName.length === 0) {
+      alert("the name cannot be empty");
+    } else {
+      const foundDuplicate = validateName(persons);
+      if (foundDuplicate) {
+        alert(`${foundDuplicate.name} is already added to the list.`);
+        setNewName("");
+      } else {
+        const newPerson = {
+          id: persons.length + 1,
+          name: newName,
+        };
+        const newArrayOfPersons = persons.concat(newPerson);
 
-    setPerson(newArrayOfPersons);
+        setPerson(newArrayOfPersons);
+      }
+    }
     setNewName("");
   };
 
