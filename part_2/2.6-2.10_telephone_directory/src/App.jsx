@@ -3,8 +3,11 @@ import Person from "./components/Person";
 
 const App = () => {
   //hooks
-  const [persons, setPerson] = useState([{ id: 1, name: "Arto Hellas" }]);
+  const [persons, setPerson] = useState([
+    { id: 1, name: "Arto Hellas", number: "0000000000" },
+  ]);
   const [newName, setNewName] = useState("");
+  const [newNumber, setNewNumber] = useState("");
 
   const validateName = (arrayWithNames) => {
     console.log("array with names:", arrayWithNames);
@@ -37,6 +40,7 @@ const App = () => {
         const newPerson = {
           id: persons.length + 1,
           name: newName,
+          number: newNumber,
         };
         const newArrayOfPersons = persons.concat(newPerson);
 
@@ -51,19 +55,26 @@ const App = () => {
     setNewName(value);
   };
 
+  const handleNumberChange = (event) => {
+    const value = event.target.value;
+    setNewNumber(value);
+  };
   return (
     <>
       <h2>PhoneBook</h2>
       <form>
-        <div>
+        <>
           name: <input value={newName} onChange={handleNameChange} />
-        </div>
-
-        <div>
+        </>
+        <>
+          number:{" "}
+          <input value={newNumber} onChange={handleNumberChange}></input>
+        </>
+        <>
           <button type="submit" onClick={addPerson}>
             add
           </button>
-        </div>
+        </>
       </form>
       <h2>Numbers</h2>
       <ul>
