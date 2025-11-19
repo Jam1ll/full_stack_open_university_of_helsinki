@@ -1,6 +1,8 @@
 import { useState } from "react";
-import Person from "./components/Person";
 import Data from "./components/Data";
+import Filter from "./components/Filter";
+import NewPerson from "./components/NewPerson";
+import Persons from "./components/Persons";
 
 const App = () => {
   //hooks
@@ -66,7 +68,6 @@ const App = () => {
     setNewFilter(value);
   };
 
-  //
   const filteredData =
     newFilter === ""
       ? persons
@@ -80,37 +81,18 @@ const App = () => {
   return (
     <>
       <h2>PhoneBook</h2>
-
-      <>
-        filter shown with:{" "}
-        <input value={newFilter} onChange={handleFilterChange}></input>
-      </>
+      <Filter newFilter={newFilter} handleFilterChange={handleFilterChange} />
 
       <h2>Add a new</h2>
-      <form>
-        <>
-          name: <input value={newName} onChange={handleNameChange} />
-        </>
-        <br />
-        <br />
-        <>
-          number:{" "}
-          <input value={newNumber} onChange={handleNumberChange}></input>
-        </>
-        <br />
-        <br />
-        <>
-          <button type="submit" onClick={addPerson}>
-            add
-          </button>
-        </>
-      </form>
+      <NewPerson
+        newName={newName}
+        newNumber={newNumber}
+        handleNameChange={handleNameChange}
+        handleNumberChange={handleNumberChange}
+        addPerson={addPerson}
+      />
       <h2>Numbers</h2>
-      <ul>
-        {filteredData.map((person) => (
-          <Person key={person.id} person={person} />
-        ))}
-      </ul>
+      <Persons filteredData={filteredData} />
     </>
   );
 };
