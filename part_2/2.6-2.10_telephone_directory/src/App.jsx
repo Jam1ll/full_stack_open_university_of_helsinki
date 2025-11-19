@@ -1,15 +1,25 @@
-import { useState } from "react";
-import Data from "./components/Data";
+import { useState, useEffect } from "react";
 import Filter from "./components/Filter";
 import NewPerson from "./components/NewPerson";
 import Persons from "./components/Persons";
+import axios from "axios";
 
 const App = () => {
   //hooks
-  const [persons, setPerson] = useState(Data);
+  const [persons, setPerson] = useState([]);
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [newFilter, setNewFilter] = useState("");
+
+  const hook = () => {
+    console.log("effect");
+    axios.get("http://localhost:3001/persons").then((response) => {
+      console.log("promise fulfilled");
+      setPerson(response.data);
+    });
+  };
+
+  useEffect(hook, []); // [] means that it'll execute just with the 1st render
 
   const validateName = (arrayWithNames) => {
     console.log("array with names:", arrayWithNames);
