@@ -1,13 +1,13 @@
 import { useState } from "react";
 import Person from "./components/Person";
+import Data from "./components/Data";
 
 const App = () => {
   //hooks
-  const [persons, setPerson] = useState([
-    { id: 1, name: "Arto Hellas", number: "0000000000" },
-  ]);
+  const [persons, setPerson] = useState(Data);
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
+  const [newFilter, setNewFilter] = useState("");
 
   const validateName = (arrayWithNames) => {
     console.log("array with names:", arrayWithNames);
@@ -48,6 +48,7 @@ const App = () => {
       }
     }
     setNewName("");
+    setNewNumber("");
   };
 
   const handleNameChange = (event) => {
@@ -59,17 +60,45 @@ const App = () => {
     const value = event.target.value;
     setNewNumber(value);
   };
+
+  const handleFilterChange = (event) => {
+    const value = event.target.value;
+    setNewFilter(value);
+  };
+
+  //
+  const filteredData =
+    newFilter === ""
+      ? persons
+      : persons.filter((person) =>
+          person.name
+            .toLowerCase()
+            .replace(/\s/g, "")
+            .includes(newFilter.toLowerCase().replace(/\s/g, ""))
+        );
+
   return (
     <>
       <h2>PhoneBook</h2>
+
+      <>
+        filter shown with:{" "}
+        <input value={newFilter} onChange={handleFilterChange}></input>
+      </>
+
+      <h2>Add a new</h2>
       <form>
         <>
           name: <input value={newName} onChange={handleNameChange} />
         </>
+        <br />
+        <br />
         <>
           number:{" "}
           <input value={newNumber} onChange={handleNumberChange}></input>
         </>
+        <br />
+        <br />
         <>
           <button type="submit" onClick={addPerson}>
             add
@@ -78,7 +107,7 @@ const App = () => {
       </form>
       <h2>Numbers</h2>
       <ul>
-        {persons.map((person) => (
+        {filteredData.map((person) => (
           <Person key={person.id} person={person} />
         ))}
       </ul>
