@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
+import personService from "./services/personService";
 import Filter from "./components/Filter";
 import NewPerson from "./components/NewPerson";
 import Persons from "./components/Persons";
-import axios from "axios";
 
 const App = () => {
   //hooks
@@ -11,15 +11,12 @@ const App = () => {
   const [newNumber, setNewNumber] = useState("");
   const [newFilter, setNewFilter] = useState("");
 
-  const hook = () => {
-    console.log("effect");
-    axios.get("http://localhost:3001/persons").then((response) => {
-      console.log("promise fulfilled");
-      setPerson(response.data);
-    });
-  };
-
-  useEffect(hook, []); // [] means that it'll execute just with the 1st render
+  useEffect(() => {
+    personService
+      .getAllPersons()
+      .then((persons) => setPerson(persons))
+      .catch((error) => console.log(error.message));
+  }, []); // [] means it'll run just 1 time and not at every render
 
   const validateName = (arrayWithNames) => {
     console.log("array with names:", arrayWithNames);
@@ -54,9 +51,8 @@ const App = () => {
           name: newName,
           number: newNumber,
         };
-        const newArrayOfPersons = persons.concat(newPerson);
-
-        setPerson(newArrayOfPersons);
+        personService.createPerson(newPerson);
+        const array = setPerson(persons.concat(newPerson));
       }
     }
     setNewName("");
