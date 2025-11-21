@@ -42,8 +42,29 @@ const App = () => {
     } else {
       const foundDuplicate = validateName(persons);
       if (foundDuplicate) {
-        alert(`${foundDuplicate.name} is already added to the list.`);
+        const confirmation = window.confirm(
+          `${foundDuplicate.name} is already added to the list. Replace old number with a new one?`
+        );
+        console.log(confirmation);
+        if (confirmation) {
+          const updatedPerson = {
+            id: foundDuplicate.id,
+            name: foundDuplicate.name,
+            number: newNumber,
+          };
+          personService
+            .updatePerson(updatedPerson.id, updatedPerson)
+            .then((response) => {
+              console.log(response);
+              setPerson(
+                persons.map((person) =>
+                  person.id !== updatedPerson.id ? person : updatedPerson
+                ) //re-render with the updated person.
+              );
+            });
+        }
         setNewName("");
+        setNewNumber("");
       } else {
         const newPerson = {
           id: `${persons.length + 1}`,
@@ -51,7 +72,7 @@ const App = () => {
           number: newNumber,
         };
         personService.createPerson(newPerson);
-        const array = setPerson(persons.concat(newPerson));
+        setPerson(persons.concat(newPerson));
       }
     }
     setNewName("");
@@ -63,10 +84,10 @@ const App = () => {
       const personToDelete = persons.find((person) => person.id === id);
       if (window.confirm(`Delete ${personToDelete.name}?`)) {
         personService
-          .deletePerson(personToDelete.id)
+          .deletePerson(id)
           .then(() => {
             const remainingPersons = persons.filter(
-              (person) => person.id !== personToDelete.id
+              (person) => person.id !== id
             );
             setPerson(remainingPersons);
           })
