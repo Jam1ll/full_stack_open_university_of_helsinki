@@ -34,7 +34,6 @@ const App = () => {
     return found; //returns whether an object or undefined
   };
 
-  //add a new person
   const addPerson = (event) => {
     event.preventDefault(); //prevent F5
 
