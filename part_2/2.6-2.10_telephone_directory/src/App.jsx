@@ -46,7 +46,7 @@ const App = () => {
         setNewName("");
       } else {
         const newPerson = {
-          id: persons.length + 1,
+          id: `${persons.length + 1}`,
           name: newName,
           number: newNumber,
         };
@@ -56,6 +56,25 @@ const App = () => {
     }
     setNewName("");
     setNewNumber("");
+  };
+
+  const deletePerson = (id) => {
+    try {
+      const personToDelete = persons.find((person) => person.id === id);
+      if (window.confirm(`Delete ${personToDelete.name}?`)) {
+        personService
+          .deletePerson(personToDelete.id)
+          .then(() => {
+            const remainingPersons = persons.filter(
+              (person) => person.id !== personToDelete.id
+            );
+            setPerson(remainingPersons);
+          })
+          .catch((error) => console.log(error.message));
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
   };
 
   const handleNameChange = (event) => {
@@ -97,7 +116,7 @@ const App = () => {
         addPerson={addPerson}
       />
       <h2>Numbers</h2>
-      <Persons filteredData={filteredData} />
+      <Persons filteredData={filteredData} deletePerson={deletePerson} />
     </>
   );
 };
