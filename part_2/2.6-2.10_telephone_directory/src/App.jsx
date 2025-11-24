@@ -3,6 +3,7 @@ import personService from "./services/personService";
 import Filter from "./components/Filter";
 import NewPerson from "./components/NewPerson";
 import Persons from "./components/Persons";
+import Notification from "./components/Notification";
 
 const App = () => {
   //hooks
@@ -10,6 +11,8 @@ const App = () => {
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [newFilter, setNewFilter] = useState("");
+  const [message, setMessage] = useState(null);
+  const [isErrorMessage, setIsErrorMessage] = useState(false);
 
   useEffect(() => {
     personService
@@ -41,26 +44,46 @@ const App = () => {
       alert("the name cannot be empty");
     } else {
       const foundDuplicate = validateName(persons);
+
       if (foundDuplicate) {
         const confirmation = window.confirm(
           `${foundDuplicate.name} is already added to the list. Replace old number with a new one?`
         );
         console.log(confirmation);
+
         if (confirmation) {
           const updatedPerson = {
             id: foundDuplicate.id,
             name: foundDuplicate.name,
             number: newNumber,
           };
+
           personService
             .updatePerson(updatedPerson.id, updatedPerson)
-            .then((response) => {
-              console.log(response);
+            .then(() => {
               setPerson(
                 persons.map((person) =>
                   person.id !== updatedPerson.id ? person : updatedPerson
                 ) //re-render with the updated person.
               );
+            })
+            .then((response) => {
+              setIsErrorMessage(false);
+              setMessage(`Changed ${updatedPerson.name}'s number`);
+              console.log("response", response);
+
+              setTimeout(() => {
+                setMessage(null);
+              }, 5000);
+            })
+            .catch((error) => {
+              setIsErrorMessage(true);
+              setMessage(`Error changing ${updatedPerson.name}'s number`);
+              console.log("error", error);
+
+              setTimeout(() => {
+                setMessage(null);
+              }, 5000);
             });
         }
         setNewName("");
@@ -71,7 +94,27 @@ const App = () => {
           name: newName,
           number: newNumber,
         };
-        personService.createPerson(newPerson);
+
+        personService
+          .createPerson(newPerson)
+          .then((response) => {
+            setIsErrorMessage(false);
+            setMessage(`Added ${newPerson.name}`);
+            console.log("response", response);
+
+            setTimeout(() => {
+              setMessage(null);
+            }, 5000);
+          })
+          .catch((error) => {
+            setIsErrorMessage(true);
+            setMessage(`Error adding ${newPerson.name}`);
+            console.log("error", error);
+
+            setTimeout(() => {
+              setMessage(null);
+            }, 5000);
+          });
         setPerson(persons.concat(newPerson));
       }
     }
@@ -91,10 +134,27 @@ const App = () => {
             );
             setPerson(remainingPersons);
           })
-          .catch((error) => console.log(error.message));
+          .then((response) => {
+            setIsErrorMessage(false);
+            setMessage(`Deleted ${personToDelete.name}`);
+            console.log("response", response);
+
+            setTimeout(() => {
+              setMessage(null);
+            }, 5000);
+          })
+          .catch((error) => {
+            setIsErrorMessage(true);
+            setMessage(`Error deleting ${[personToDelete].name}`);
+            console.log("error", error);
+
+            setTimeout(() => {
+              setMessage(null);
+            }, 5000);
+          });
       }
     } catch (error) {
-      console.log(error.message);
+      console.log("error", error.message);
     }
   };
 
@@ -126,6 +186,7 @@ const App = () => {
   return (
     <>
       <h2>PhoneBook</h2>
+      <Notification message={message} isErrorMessage={isErrorMessage} />
       <Filter newFilter={newFilter} handleFilterChange={handleFilterChange} />
 
       <h2>Add a new</h2>
