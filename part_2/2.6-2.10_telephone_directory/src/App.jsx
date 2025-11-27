@@ -145,7 +145,11 @@ const App = () => {
           })
           .catch((error) => {
             setIsErrorMessage(true);
-            setMessage(`Error deleting ${[personToDelete].name}`);
+            setMessage(
+              `Error deleting ${
+                [personToDelete].name
+              }. Maybe it has already been deleted.`
+            );
             console.log("error", error);
 
             setTimeout(() => {
