@@ -2,7 +2,7 @@ import Country from "./Country";
 import Message from "./Message";
 
 const Countries = ({ countries, inputValue }) => {
-  console.log("Countries component start");
+  console.log("Inside Countries component");
 
   //filter data
   const filteredCountries = countries.filter((c) => {
